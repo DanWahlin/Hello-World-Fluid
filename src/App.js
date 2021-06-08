@@ -32,6 +32,15 @@ const containerSchema = {
 
 TinyliciousClient.init();
 
+const getFluidData = async () => {
+
+    const [fluidContainer, ] = isNew
+        ? await TinyliciousClient.createContainer(serviceConfig, containerSchema)
+        : await TinyliciousClient.getContainer(serviceConfig, containerSchema);
+
+    return fluidContainer.initialObjects;
+}
+
 function App() {
     const [viewData, setViewData] = React.useState();
 
