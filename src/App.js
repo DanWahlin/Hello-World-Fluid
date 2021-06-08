@@ -29,7 +29,7 @@ const getFluidData = async () => {
 
     const serviceConfig = { id: containerId };
 
-    const fluidContainer = isNew
+    const [fluidContainer, ] = isNew
         ? await TinyliciousClient.createContainer(serviceConfig, containerSchema)
         : await TinyliciousClient.getContainer(serviceConfig, containerSchema);
     // returned initialObjects are live Fluid data structures
