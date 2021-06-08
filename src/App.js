@@ -5,6 +5,7 @@
 
 import React from "react";
 import { SharedMap } from "@fluidframework/map";
+import TinyliciousClient from "@fluid-experimental/tinylicious-client";
 
 /**
  * This function imitates a file system. It allows us to create durable IDs for containers so we can access them later.
@@ -28,6 +29,8 @@ const containerSchema = {
     name: 'cra-demo-container',
     initialObjects: { mySharedMap: SharedMap }
 };
+
+TinyliciousClient.init();
 
 function App() {
     const [viewData, setViewData] = React.useState();
