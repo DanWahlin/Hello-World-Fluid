@@ -48,8 +48,23 @@ function App() {
         getFluidData().then(data => setFluidData(data))
     }, []);
 
-
     const [viewData, setViewData] = React.useState();
+
+    React.useEffect(() => {
+        if (!fluidData) return;
+
+        const { mySharedMap } = fluidData;
+
+        const syncView = () => setViewData({ time: mySharedMap.get("time") });
+        
+        // ensure sync runs at least once
+        syncView();
+
+        // update state each time our map changes
+        mySharedMap.on("valueChanged", syncView);
+        return () => { mySharedMap.off("valueChanged", syncView) }
+
+    }, [fluidData])
 
     return (
         <div>
