@@ -4,73 +4,14 @@
  */
 
 import React from "react";
-import TinyliciousClient from "@fluid-experimental/tinylicious-client";
-import { SharedMap } from "@fluidframework/map";
-
-const getContainerId = () => {
-    let isNew = false;
-    if (window.location.hash.length === 0) {
-        isNew = true;
-        window.location.hash = Date.now().toString();
-    }
-    const containerId = window.location.hash.substring(1);
-    return { containerId, isNew };
-};
-
-const { containerId, isNew } = getContainerId();
-
-const containerSchema = {
-    name: 'cra-demo-container',
-    initialObjects: { mySharedMap: SharedMap }
-};
-
-const serviceConfig = { id: containerId };
-
-TinyliciousClient.init();
-
-const getFluidData = async () => {
-
-    const [fluidContainer, ] = isNew
-        ? await TinyliciousClient.createContainer(serviceConfig, containerSchema)
-        : await TinyliciousClient.getContainer(serviceConfig, containerSchema);
-    // returned initialObjects are live Fluid data structures
-    return fluidContainer.initialObjects;
-}
 
 function App() {
-
-    const [fluidData, setFluidData] = React.useState();
     const [viewData, setViewData] = React.useState();
-
-    React.useEffect(() => {
-        // Get/Create container and return live Fluid data
-        getFluidData().then(data => setFluidData(data))
-    }, []);
-
-    React.useEffect(() => {
-        if (!fluidData) return;
-
-        const { mySharedMap } = fluidData;
-        // sync Fluid data into view state
-        const syncView = () => setViewData({ time: mySharedMap.get("time") });
-        // ensure sync runs at least once
-        syncView();
-        // update state each time our map changes
-        mySharedMap.on("valueChanged", syncView);
-        return () => { mySharedMap.off("valueChanged", syncView) }
-
-    }, [fluidData])
-
-
-    if (!viewData) return <div />;
-
-    // business logic could be passed into the view via context
-    const setTime = () => fluidData.mySharedMap.set("time", Date.now().toString());
 
     return (
         <div>
-            <button onClick={setTime}> click </button>
-            <span>{viewData.time}</span>
+            <button> click </button>
+            <span> {viewData ? viewData.time : "undefined"}</span>
         </div>
     )
 }
