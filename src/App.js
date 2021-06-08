@@ -19,7 +19,7 @@ const getContainerId = () => {
         window.location.hash = Date.now().toString();
     }
     const containerId = window.location.hash.substring(1);
-    return { containerId, isdNew };
+    return { containerId, isNew };
 };
 
 const { containerId, isNew } = getContainerId();
