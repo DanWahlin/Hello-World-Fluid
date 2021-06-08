@@ -1,0 +1,117 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2580
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 JetBrainsMono-Regular;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red255\green255\blue255;\red15\green112\blue1;
+\red0\green0\blue255;\red101\green76\blue29;\red0\green0\blue109;\red157\green0\blue210;\red11\green90\blue180;
+\red19\green118\blue70;\red32\green108\blue135;\red144\green1\blue18;\red11\green90\blue180;\red101\green76\blue29;
+\red32\green108\blue135;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\cssrgb\c100000\c100000\c100000;\cssrgb\c0\c50196\c0;
+\cssrgb\c0\c0\c100000;\cssrgb\c47451\c36863\c14902;\cssrgb\c0\c6275\c50196;\cssrgb\c68627\c0\c85882;\cssrgb\c0\c43922\c75686;
+\cssrgb\c3529\c52549\c34510;\cssrgb\c14902\c49804\c60000;\cssrgb\c63922\c8235\c8235;\cssrgb\c0\c43922\c75686;\cssrgb\c47451\c36863\c14902;
+\cssrgb\c14902\c49804\c60000;}
+\margl1440\margr1440\vieww27120\viewh17580\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs48 \cf0 Step by Step\
+
+\fs32 \
+
+\fs36 Step 1: Import SharedMap and define container schema
+\f1\fs32 \
+\
+\pard\pardeftab720\sl540\partightenfactor0
+
+\f0\fs36 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \
+\
+\cb1 Step 2: Build \'93serviceConfig\'94\
+\
+\pard\pardeftab720\sl540\partightenfactor0
+\cf4 \cb3 \strokec4 /**\cf2 \cb1 \strokec2 \
+\cf4 \cb3 \strokec4  * This function imitates a file system. It allows us to create durable IDs for containers so we can access them later.\cf2 \cb1 \strokec2 \
+\cf4 \cb3 \strokec4  * The ID is the number after the hash in the URL.\cf2 \cb1 \strokec2 \
+\cf4 \cb3 \strokec4  * In a production system, we may store the list of container ID's in another database.\cf2 \cb1 \strokec2 \
+\cf4 \cb3 \strokec4  */\cf2 \cb1 \strokec2 \
+\pard\pardeftab720\sl540\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf2 \strokec2  \cf6 \strokec6 getContainerId\cf2 \strokec2  = () \cf5 \strokec5 =>\cf2 \strokec2  \{\cb1 \
+\pard\pardeftab720\sl540\partightenfactor0
+\cf2 \cb3     \cf5 \strokec5 let\cf2 \strokec2  \cf7 \strokec7 isNew\cf2 \strokec2  = \cf5 \strokec5 false\cf2 \strokec2 ;\cb1 \
+\cb3     \cf8 \strokec8 if\cf2 \strokec2  (\cf7 \strokec7 window\cf2 \strokec2 .\cf7 \strokec7 location\cf2 \strokec2 .\cf7 \strokec7 hash\cf2 \strokec2 .\cf9 \strokec9 length\cf2 \strokec2  === \cf10 \strokec10 0\cf2 \strokec2 ) \{\cb1 \
+\cb3         \cf7 \strokec7 isNew\cf2 \strokec2  = \cf5 \strokec5 true\cf2 \strokec2 ;\cb1 \
+\cb3         \cf7 \strokec7 window\cf2 \strokec2 .\cf7 \strokec7 location\cf2 \strokec2 .\cf7 \strokec7 hash\cf2 \strokec2  = \cf11 \strokec11 Date\cf2 \strokec2 .\cf6 \strokec6 now\cf2 \strokec2 ().\cf6 \strokec6 toString\cf2 \strokec2 ();\cb1 \
+\cb3     \}\cb1 \
+\cb3     \cf5 \strokec5 const\cf2 \strokec2  \cf9 \strokec9 containerId\cf2 \strokec2  = \cf7 \strokec7 window\cf2 \strokec2 .\cf7 \strokec7 location\cf2 \strokec2 .\cf7 \strokec7 hash\cf2 \strokec2 .\cf6 \strokec6 substring\cf2 \strokec2 (\cf10 \strokec10 1\cf2 \strokec2 );\cb1 \
+\cb3     \cf8 \strokec8 return\cf2 \strokec2  \{ \cf7 \strokec7 containerId\cf2 \strokec2 , \cf7 \strokec7 isNew\cf2 \strokec2  \};\cb1 \
+\cb3 \};\cb1 \
+\
+\pard\pardeftab720\sl540\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf2 \strokec2  \{ \cf9 \strokec9 containerId\cf2 \strokec2 , \cf9 \strokec9 isNew\cf2 \strokec2  \} = \cf6 \strokec6 getContainerId\cf2 \strokec2 ();\cb1 \
+\cf5 \cb3 \strokec5 const\cf2 \strokec2  \cf9 \strokec9 serviceConfig\cf2 \strokec2  = \{ \cf7 \strokec7 id:\cf2 \strokec2  \cf9 \strokec9 containerId\cf2 \strokec2  \};\cb1 \
+\
+Step 3: Initialize Tinylicious\
+\
+\pard\pardeftab720\sl540\partightenfactor0
+\cf8 \cb3 \strokec8 import\cf2 \strokec2  \cf7 \strokec7 TinyliciousClient\cf2 \strokec2  \cf8 \strokec8 from\cf2 \strokec2  \cf12 \strokec12 "@fluid-experimental/tinylicious-client"\cf2 \strokec2 ;\cb1 \
+\
+\cf7 \cb3 \strokec7 TinyliciousClient\cf2 \strokec2 .\cf6 \strokec6 init\cf2 \strokec2 ();\cb1 \
+\
+\
+Step 4: Create or Get Container and return initialObjects (schema with SharedMap)\
+\
+\pard\pardeftab720\sl540\partightenfactor0
+\cf5 \cb3 \strokec5 const\cf2 \strokec2  \cf6 \strokec6 getFluidData\cf2 \strokec2  = \cf5 \strokec5 async\cf2 \strokec2  () \cf5 \strokec5 =>\cf2 \strokec2  \{\cb1 \
+\
+\pard\pardeftab720\sl540\partightenfactor0
+\cf2 \cb3     \cf5 \strokec5 const\cf2 \strokec2  [\cf9 \strokec9 fluidContainer\cf2 \strokec2 , ] = \cf7 \strokec7 isNew\cf2 \cb1 \strokec2 \
+\cb3         ? \cf8 \strokec8 await\cf2 \strokec2  \cf7 \strokec7 TinyliciousClient\cf2 \strokec2 .\cf6 \strokec6 createContainer\cf2 \strokec2 (\cf7 \strokec7 serviceConfig\cf2 \strokec2 , \cf7 \strokec7 containerSchema\cf2 \strokec2 )\cb1 \
+\cb3         : \cf8 \strokec8 await\cf2 \strokec2  \cf7 \strokec7 TinyliciousClient\cf2 \strokec2 .\cf6 \strokec6 getContainer\cf2 \strokec2 (\cf7 \strokec7 serviceConfig\cf2 \strokec2 , \cf7 \strokec7 containerSchema\cf2 \strokec2 );\cb1 \
+\
+\cb3     \cf8 \strokec8 return\cf2 \strokec2  \cf9 \strokec9 fluidContainer\cf2 \strokec2 .\cf7 \strokec7 initialObjects\cf2 \strokec2 ;\cb1 \
+\cb3 \}\cb1 \
+\
+Step 5: Add hooks\
+\
+\cb3     \cf5 \strokec5 const\cf2 \strokec2  [\cf9 \strokec9 fluidData\cf2 \strokec2 , \cf6 \strokec6 setFluidData\cf2 \strokec2 ] = \cf11 \strokec11 React\cf2 \strokec2 .\cf6 \strokec6 useState\cf2 \strokec2 ();\
+\pard\pardeftab720\sl540\partightenfactor0
+\cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0     \cf5 const\cf2  [\cf13 viewData\cf2 , \cf14 setViewData\cf2 ] = \cf15 React\cf2 .\cf14 useState\cf2 ();\cb1 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \
+\pard\pardeftab720\sl540\partightenfactor0
+\cf2 \
+\cb3     \cf11 \strokec11 React\cf2 \strokec2 .\cf6 \strokec6 useEffect\cf2 \strokec2 (() \cf5 \strokec5 =>\cf2 \strokec2  \{\cb1 \
+\cb3         \cf6 \strokec6 getFluidData\cf2 \strokec2 ().\cf6 \strokec6 then\cf2 \strokec2 (\cf7 \strokec7 data\cf2 \strokec2  \cf5 \strokec5 =>\cf2 \strokec2  \cf6 \strokec6 setFluidData\cf2 \strokec2 (\cf7 \strokec7 data\cf2 \strokec2 ))\cb1 \
+\cb3     \}, []);\cb1 \
+\
+Step 6: Connect View Data to SharedMap using useEffect() \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \
+\cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0     \
+\pard\pardeftab720\sl540\partightenfactor0
+\cf11 \strokec11 	React\cf2 \strokec2 .\cf6 \strokec6 useEffect\cf2 \strokec2 (() \cf5 \strokec5 =>\cf2 \strokec2  \{\cb1 \
+\pard\pardeftab720\sl540\partightenfactor0
+\cf2 \cb3         \cf8 \strokec8 if\cf2 \strokec2  (!\cf7 \strokec7 fluidData\cf2 \strokec2 ) \cf8 \strokec8 return\cf2 \strokec2 ;\cb1 \
+\
+\cb3         \cf5 \strokec5 const\cf2 \strokec2  \{ \cf9 \strokec9 mySharedMap\cf2 \strokec2  \} = \cf7 \strokec7 fluidData\cf2 \strokec2 ;\cb1 \
+\
+\cb3         \cf5 \strokec5 const\cf2 \strokec2  \cf6 \strokec6 syncView\cf2 \strokec2  = () \cf5 \strokec5 =>\cf2 \strokec2  \cf6 \strokec6 setViewData\cf2 \strokec2 (\{ \cf7 \strokec7 time:\cf2 \strokec2  \cf9 \strokec9 mySharedMap\cf2 \strokec2 .\cf6 \strokec6 get\cf2 \strokec2 (\cf12 \strokec12 "time"\cf2 \strokec2 ) \});\cb1 \
+\cb3         \cb1 \
+\cb3         \cf4 \strokec4 // ensure sync runs at least once\cf2 \cb1 \strokec2 \
+\cb3         \cf6 \strokec6 syncView\cf2 \strokec2 ();\cb1 \
+\
+\cb3         \cf4 \strokec4 // update state each time our map changes\cf2 \cb1 \strokec2 \
+\cb3         \cf9 \strokec9 mySharedMap\cf2 \strokec2 .\cf6 \strokec6 on\cf2 \strokec2 (\cf12 \strokec12 "valueChanged"\cf2 \strokec2 , \cf6 \strokec6 syncView\cf2 \strokec2 );\cb1 \
+\cb3         \cf8 \strokec8 return\cf2 \strokec2  () \cf5 \strokec5 =>\cf2 \strokec2  \{ \cf9 \strokec9 mySharedMap\cf2 \strokec2 .\cf6 \strokec6 off\cf2 \strokec2 (\cf12 \strokec12 "valueChanged"\cf2 \strokec2 , \cf6 \strokec6 syncView\cf2 \strokec2 ) \}\cb1 \
+\
+\cb3     \}, [\cf7 \strokec7 fluidData\cf2 \strokec2 ])\
+\
+Step 7: Add setTime function for click event\
+\
+    \cf5 \strokec5 const\cf2 \strokec2  \cf6 \strokec6 setTime\cf2 \strokec2  = () \cf5 \strokec5 =>\cf2 \strokec2  \cf7 \strokec7 fluidData\cf2 \strokec2 .\cf7 \strokec7 mySharedMap\cf2 \strokec2 .\cf6 \strokec6 set\cf2 \strokec2 (\cf12 \strokec12 "time"\cf2 \strokec2 , \cf11 \strokec11 Date\cf2 \strokec2 .\cf6 \strokec6 now\cf2 \strokec2 ().\cf6 \strokec6 toString\cf2 \strokec2 ());\cb1 \
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1\fs32 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\
+\
+\
+}
