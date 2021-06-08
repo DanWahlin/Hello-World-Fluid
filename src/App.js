@@ -42,6 +42,13 @@ const getFluidData = async () => {
 }
 
 function App() {
+    const [fluidData, setFluidData] = React.useState();
+
+    React.useEffect(() => {
+        getFluidData().then(data => setFluidData(data))
+    }, []);
+
+
     const [viewData, setViewData] = React.useState();
 
     return (
