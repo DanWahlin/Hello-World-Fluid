@@ -17,17 +17,18 @@ const getContainerId = () => {
     return { containerId, isNew };
 };
 
+const { containerId, isNew } = getContainerId();
+
+const containerSchema = {
+    name: 'cra-demo-container',
+    initialObjects: { mySharedMap: SharedMap }
+};
+
+const serviceConfig = { id: containerId };
+
 TinyliciousClient.init();
 
 const getFluidData = async () => {
-    const { containerId, isNew } = getContainerId();
-
-    const containerSchema = {
-        name: 'cra-demo-container',
-        initialObjects: { mySharedMap: SharedMap }
-    };
-
-    const serviceConfig = { id: containerId };
 
     const [fluidContainer, ] = isNew
         ? await TinyliciousClient.createContainer(serviceConfig, containerSchema)
