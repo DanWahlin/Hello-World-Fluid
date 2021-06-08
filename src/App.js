@@ -66,9 +66,11 @@ function App() {
 
     }, [fluidData])
 
+    const setTime = () => fluidData.mySharedMap.set("time", Date.now().toString());
+
     return (
         <div>
-            <button> click </button>
+            <button onClick={setTime}> click </button>
             <span> {viewData ? viewData.time : "undefined"}</span>
         </div>
     )
