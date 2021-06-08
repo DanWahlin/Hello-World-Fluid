@@ -4,6 +4,12 @@
  */
 
 import React from "react";
+import { SharedMap } from "@fluidframework/map";
+
+const containerSchema = {
+    name: 'cra-demo-container',
+    initialObjects: { mySharedMap: SharedMap }
+};
 
 function App() {
     const [viewData, setViewData] = React.useState();
